@@ -870,67 +870,7 @@ void AndeeHelper::setId(int value)
 
 void AndeeHelper::setType(char type)
 {
-	if(type == DATA_OUT)
-	{
-		sprintf(bleBuffer , "%c%c", (START_TAG_UIXYWH), (DATA_OUT));
-	}
-	else if(type == DATA_OUT_CIRCLE)
-	{		
-		sprintf(bleBuffer, "%c%c",START_TAG_UIXYWH,DATA_OUT_CIRCLE);
-	}
-	else if(type == DATA_OUT_HEADER)
-	{		
-		sprintf(bleBuffer, "%c%c",START_TAG_UIXYWH,DATA_OUT_HEADER);
-	}
-	
-	else if(type == BUTTON_IN)
-	{		
-		sprintf(bleBuffer, "%c%c",START_TAG_UIXYWH,BUTTON_IN);
-	}
-	else if(type == CIRCLE_BUTTON)
-	{		
-		sprintf(bleBuffer, "%c%c",START_TAG_UIXYWH,CIRCLE_BUTTON);
-	}
-	
-	else if(type == ANALOG_DIAL_OUT)
-	{
-		sprintf(bleBuffer,"%c%c", START_TAG_UIXYWH, ANALOG_DIAL_OUT);
-	}
-	
-	else if(type == KEYBOARD_IN)
-	{		
-		sprintf(bleBuffer, "%c%c", START_TAG_UIXYWH, KEYBOARD_IN);
-	}
-	
-	else if(type == DATE_IN)
-	{
-		sprintf(bleBuffer, "%c%c", START_TAG_UIXYWH, DATE_IN);
-	}
-	
-	else if(type == TIME_IN)
-	{
-		sprintf(bleBuffer,"%c%c", START_TAG_UIXYWH, TIME_IN);
-	}
-	
-	else if(type == SLIDER_IN)
-	{
-		sprintf(bleBuffer, "%c%c", START_TAG_UIXYWH,SLIDER_IN);
-	}				
-	
-	else if (type == JOYSTICK)
-	{
-		sprintf(bleBuffer,"%c%c", START_TAG_UIXYWH,JOYSTICK);
-	}
-	
-	else if (type == WATCH)
-	{
-		sprintf(bleBuffer,"%c%c", START_TAG_UIXYWH,WATCH);
-	}
-
-	else
-	{
-		
-	}
+	typeBuffer = type;
 }
 
 void AndeeHelper::setLocation(char row, char order, char span){	
@@ -1581,75 +1521,69 @@ void AndeeHelper::update(void)
 	//AndeeNRF52.isConnected();
 	
 	
-	if(bleBuffer[1] == DATA_OUT)	
+	switch(typeBuffer)
 	{
-		sprintf(bleBuffer , "%c%c%c%s%c%c%s%s%s%s%c%s%c%s%c%s%c", (START_TAG_UIXYWH),(DATA_OUT),(id), xywhBuffer,'0',SEPARATOR,titleBGBuffer,titleFontBuffer,bodyBGBuffer,bodyFontBuffer,SEPARATOR,	titleBuffer,SEPARATOR,unitBuffer,SEPARATOR,dataBuffer,(END_TAG_UIXYWH));
-	}
-	else if(bleBuffer[1] == DATA_OUT_CIRCLE)	
-	{
-		sprintf(bleBuffer , "%c%c%c%s%c%c%s%s%s%c%s%c%s%c%s%c", (START_TAG_UIXYWH),(DATA_OUT_CIRCLE),(id), xywhBuffer,'0',SEPARATOR,titleFontBuffer,bodyBGBuffer,bodyFontBuffer,SEPARATOR,titleBuffer,SEPARATOR,unitBuffer,SEPARATOR,dataBuffer,(END_TAG_UIXYWH));
-	}
-	else if(bleBuffer[1] == DATA_OUT_HEADER)	
-	{
-		sprintf(bleBuffer , "%c%c%c%s%c%c%s%s%c%s%c", (START_TAG_UIXYWH),(DATA_OUT_HEADER),(id), xywhBuffer,'0',SEPARATOR,bodyBGBuffer,bodyFontBuffer,SEPARATOR,titleBuffer,(END_TAG_UIXYWH));
-	}
-	
-	
-	else if(bleBuffer[1] == BUTTON_IN)
-	{
-		memcpy(titleBGBuffer,bodyBGBuffer,5);
-		memcpy(titleFontBuffer,bodyFontBuffer,5);
-		sprintf(bleBuffer, "%c%c%c%s%c%c%s%s%c%s%c",START_TAG_UIXYWH,BUTTON_IN, id,xywhBuffer,inputTypeBuffer,SEPARATOR,titleBGBuffer,titleFontBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
-	}
-	else if(bleBuffer[1] == CIRCLE_BUTTON)
-	{
-		sprintf(bleBuffer, "%c%c%c%s%c%c%s%s%c%s%c",START_TAG_UIXYWH,CIRCLE_BUTTON, id,xywhBuffer,inputTypeBuffer,SEPARATOR,titleBGBuffer,titleFontBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
-	}
-	
-	
-	
-	else if(bleBuffer[1] == ANALOG_DIAL_OUT)
-	{
-		if (strcmp (maxBuffer," ") == 0)
-		{
-			sprintf(maxBuffer,"%s","255");
-		}
-		if (strcmp (minBuffer," ") == 0)
-		{
-			sprintf(minBuffer,"%c",'0');
-		}
-		sprintf(bleBuffer,"%c%c%c%s%c%c%s%s%c%s%c%s%c%s%c%s%c%s%c", START_TAG_UIXYWH, ANALOG_DIAL_OUT, id, xywhBuffer,'0', SEPARATOR, titleBGBuffer,bodyBGBuffer, SEPARATOR, titleBuffer, SEPARATOR, unitBuffer,SEPARATOR, dataBuffer, SEPARATOR, maxBuffer, SEPARATOR, minBuffer, END_TAG_UIXYWH);
-	}	
-	
-	
-	else if(bleBuffer[1] == KEYBOARD_IN)
-	{
-		sprintf(bleBuffer, "%c%c%c%s%c%c%s%c%s%c%s%c", START_TAG_UIXYWH, KEYBOARD_IN, id, xywhBuffer, inputTypeBuffer,SEPARATOR, titleFontBuffer, SEPARATOR, titleBuffer, SEPARATOR, dataBuffer, END_TAG_UIXYWH);
-	}
-	
-	else if(bleBuffer[1] == DATE_IN)
-	{
-		sprintf(bleBuffer, "%c%c%c%s%c%c%s%c%s%c%s%c", START_TAG_UIXYWH, DATE_IN,  id,xywhBuffer, inputTypeBuffer,SEPARATOR, titleFontBuffer, SEPARATOR, titleBuffer, SEPARATOR, dataBuffer, END_TAG_UIXYWH);
-	}
-	
-	else if(bleBuffer[1] == TIME_IN)
-	{
-		sprintf(bleBuffer,"%c%c%c%s%c%c%s%c%s%c%s%c", START_TAG_UIXYWH, TIME_IN,  id,xywhBuffer, inputTypeBuffer,SEPARATOR, titleFontBuffer, SEPARATOR, titleBuffer, SEPARATOR, dataBuffer, END_TAG_UIXYWH);
-	}
-	
-	else if(bleBuffer[1] == SLIDER_IN)
-	{
-		sprintf(bleBuffer, "%c%c%c%s%c%c%s%s%c%s%c%s%c%s%c%s%c%c%c%c%c", START_TAG_UIXYWH,SLIDER_IN, id,xywhBuffer,inputTypeBuffer,SEPARATOR,titleBGBuffer,bodyBGBuffer,SEPARATOR,titleBuffer,SEPARATOR,dataBuffer,SEPARATOR,maxBuffer,SEPARATOR,minBuffer,SEPARATOR,subBuffer,SEPARATOR,flashBuffer,END_TAG_UIXYWH);
-	}	
-	
-	else if(bleBuffer[1] == JOYSTICK)
-	{
-		sprintf(bleBuffer,"%c%c%c%s%c%c%s%s%s%c%s%c", START_TAG_UIXYWH,JOYSTICK, id,xywhBuffer,inputTypeBuffer,SEPARATOR,	titleBGBuffer,titleFontBuffer,bodyBGBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
-	}
-	
-	else if(bleBuffer[1] == WATCH)
-	{
-		sprintf(bleBuffer,"%c%c%c%c%c%s%s%c%s%c", START_TAG_UIXYWH,WATCH,SEPARATOR,watchBuffer,SEPARATOR,titleBGBuffer,titleFontBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
+		case DATA_OUT:
+			sprintf(bleBuffer , "%c%c%c%s%c%c%s%s%s%s%c%s%c%s%c%s%c", (START_TAG_UIXYWH),(DATA_OUT),(id), xywhBuffer,'0',SEPARATOR,titleBGBuffer,titleFontBuffer,bodyBGBuffer,bodyFontBuffer,SEPARATOR,	titleBuffer,SEPARATOR,unitBuffer,SEPARATOR,dataBuffer,(END_TAG_UIXYWH));
+		break;
+		
+		case DATA_OUT_CIRCLE:
+			sprintf(bleBuffer , "%c%c%c%s%c%c%s%s%s%c%s%c%s%c%s%c", (START_TAG_UIXYWH),(DATA_OUT_CIRCLE),(id), xywhBuffer,'0',SEPARATOR,titleFontBuffer,bodyBGBuffer,bodyFontBuffer,SEPARATOR,titleBuffer,SEPARATOR,unitBuffer,SEPARATOR,dataBuffer,(END_TAG_UIXYWH));
+		break;
+		
+		case DATA_OUT_HEADER:
+			sprintf(bleBuffer , "%c%c%c%s%c%c%s%s%c%s%c", (START_TAG_UIXYWH),(DATA_OUT_HEADER),(id), xywhBuffer,'0',SEPARATOR,bodyBGBuffer,bodyFontBuffer,SEPARATOR,titleBuffer,(END_TAG_UIXYWH));
+		break;
+		
+		case BUTTON_IN:
+			memcpy(titleBGBuffer,bodyBGBuffer,5);
+			memcpy(titleFontBuffer,bodyFontBuffer,5);
+			sprintf(bleBuffer, "%c%c%c%s%c%c%s%s%c%s%c",START_TAG_UIXYWH,BUTTON_IN, id,xywhBuffer,inputTypeBuffer,SEPARATOR,titleBGBuffer,titleFontBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
+		break;
+		
+		case CIRCLE_BUTTON:
+			sprintf(bleBuffer, "%c%c%c%s%c%c%s%s%c%s%c",START_TAG_UIXYWH,CIRCLE_BUTTON, id,xywhBuffer,inputTypeBuffer,SEPARATOR,titleBGBuffer,titleFontBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
+		break;
+		
+		case ANALOG_DIAL_OUT:
+			if (strcmp (maxBuffer," ") == 0)
+			{
+				sprintf(maxBuffer,"%s","255");
+			}
+			if (strcmp (minBuffer," ") == 0)
+			{
+				sprintf(minBuffer,"%c",'0');
+			}
+			sprintf(bleBuffer,"%c%c%c%s%c%c%s%s%c%s%c%s%c%s%c%s%c%s%c", START_TAG_UIXYWH, ANALOG_DIAL_OUT, id, xywhBuffer,'0', SEPARATOR, titleBGBuffer,bodyBGBuffer, SEPARATOR, titleBuffer, SEPARATOR, unitBuffer,SEPARATOR, dataBuffer, SEPARATOR, maxBuffer, SEPARATOR, minBuffer, END_TAG_UIXYWH);
+		break;
+		
+		case KEYBOARD_IN:
+			sprintf(bleBuffer, "%c%c%c%s%c%c%s%c%s%c%s%c", START_TAG_UIXYWH, KEYBOARD_IN, id, xywhBuffer, inputTypeBuffer,SEPARATOR, titleFontBuffer, SEPARATOR, titleBuffer, SEPARATOR, dataBuffer, END_TAG_UIXYWH);
+		break;
+		
+		case DATE_IN:
+			sprintf(bleBuffer, "%c%c%c%s%c%c%s%c%s%c%s%c", START_TAG_UIXYWH, DATE_IN,  id,xywhBuffer, inputTypeBuffer,SEPARATOR, titleFontBuffer, SEPARATOR, titleBuffer, SEPARATOR, dataBuffer, END_TAG_UIXYWH);
+		break;
+		
+		case TIME_IN:
+			sprintf(bleBuffer,"%c%c%c%s%c%c%s%c%s%c%s%c", START_TAG_UIXYWH, TIME_IN,  id,xywhBuffer, inputTypeBuffer,SEPARATOR, titleFontBuffer, SEPARATOR, titleBuffer, SEPARATOR, dataBuffer, END_TAG_UIXYWH);
+		break;
+		
+		case SLIDER_IN:
+			sprintf(bleBuffer, "%c%c%c%s%c%c%s%s%c%s%c%s%c%s%c%s%c%c%c%c%c", START_TAG_UIXYWH,SLIDER_IN, id,xywhBuffer,inputTypeBuffer,SEPARATOR,titleBGBuffer,bodyBGBuffer,SEPARATOR,titleBuffer,SEPARATOR,dataBuffer,SEPARATOR,maxBuffer,SEPARATOR,minBuffer,SEPARATOR,subBuffer,SEPARATOR,flashBuffer,END_TAG_UIXYWH);
+		break;
+		
+		case JOYSTICK:
+			sprintf(bleBuffer,"%c%c%c%s%c%c%s%s%s%c%s%c", START_TAG_UIXYWH,JOYSTICK, id,xywhBuffer,inputTypeBuffer,SEPARATOR,	titleBGBuffer,titleFontBuffer,bodyBGBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
+		break;
+		
+		case WATCH:
+			sprintf(bleBuffer,"%c%c%c%c%c%s%s%c%s%c", START_TAG_UIXYWH,WATCH,SEPARATOR,watchBuffer,SEPARATOR,titleBGBuffer,titleFontBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
+		break;
+		
+		default:
+			Serial.println("\nUnknown widget type!");
+		break;
 	}
 	
 	printHEX("bleBuffer",bleBuffer);
