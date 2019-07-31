@@ -203,7 +203,7 @@ extern AndeeClass Andee;
 	//Each widget will eb assigned an id. This is for identification
 	//unsigned char UIUpdateFlag;
 			
-	unsigned char typeBuffer;
+	char typeBuffer;
 	char dataBuffer[32];
 	//buffer for data in a widget
 	

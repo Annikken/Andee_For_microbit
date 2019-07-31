@@ -868,7 +868,7 @@ void AndeeHelper::setId(int value)
 	}
 }
 
-void AndeeHelper::setType(unsigned char type)
+void AndeeHelper::setType(char type)
 {
 	if(type == DATA_OUT)
 	{
