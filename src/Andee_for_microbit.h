@@ -194,26 +194,17 @@ extern AndeeClass Andee;
 
  class AndeeHelper
 {
-	private:	
-	
+	private:		
 	//This class contains buffers that stores the characteristics of each widgets. Each widget will have its own buffers.
 	
-	public:
 	unsigned char id;
 	//Each widget will eb assigned an id. This is for identification
 	//unsigned char UIUpdateFlag;
 			
 	char typeBuffer;
-	char dataBuffer[32];
-	//buffer for data in a widget
+	//buffer for storing widget type
 	
-	char titleBuffer[32];
-	//buffer for title in a widget
-	
-	char unitBuffer[32];
-	//buffer for unit in a widget
-	
-	char xywhBuffer[13];
+	char xywhBuffer[5];
 	//buffer for coordinates in a widget. This determines x and y position and size in width and height
 	
 	char titleBGBuffer[5];
@@ -227,6 +218,15 @@ extern AndeeClass Andee;
 	
 	char bodyFontBuffer[5];
 	//buffer for widget font color
+	
+	char dataBuffer[32];	
+	//buffer for data in a widget
+	
+	char titleBuffer[32];
+	//buffer for title in a widget
+	
+	char unitBuffer[32];
+	//buffer for unit in a widget
 	
 	char minBuffer[5];
 	//buffer for min value. Only used in some widgets
@@ -247,6 +247,8 @@ extern AndeeClass Andee;
 	//buffer to store watch data	
 	
 	char tempBuffer[12];
+	
+	public:	
 		
 	void setId(int);
 	//This function sets the id for the widget. Also initialises some parts of the widget to a default layout
