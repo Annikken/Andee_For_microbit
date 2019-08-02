@@ -106,7 +106,7 @@ void read_callback(BLECentral& central, BLECharacteristic& characteristic)
 		memcpy(readPartBuffer,buffer,mLen);			
 	}
 	
-	//printHEX("readPartBuffer",readPartBuffer);
+	// printHEX("readPartBuffer",readPartBuffer);
 	rLen = strlen(readPartBuffer);
 	
 	for(unsigned int b = 0; b < rLen ;b++)
@@ -120,7 +120,7 @@ void read_callback(BLECentral& central, BLECharacteristic& characteristic)
 			memcpy(readBuffer,readPartBuffer,rLen);
 			memset(readPartBuffer,0x00,READPARTBUFFERMAX);
 		}
-	} 
+	}
   }
   
 }
@@ -130,8 +130,7 @@ void read_callback(BLECentral& central, BLECharacteristic& characteristic)
 void btSend(char* UI)
 {
   char partialUI[PACKET_LEN + 1];
-  int msgLen = 0;
-  
+  int msgLen = 0;  
 	
   msgLen = strlen(UI);
   if(AndeeConnected == true)
@@ -142,17 +141,18 @@ void btSend(char* UI)
       {
         memset(partialUI,0x00,PACKET_LEN + 1);
         memcpy(partialUI, UI + i, PACKET_LEN);
-		printHEX("BTMsg",partialUI);
+		// printHEX("BTMsg",partialUI);
         
 		AndeeTx.setValue((const char*)partialUI);
-		delay(2);
+		delay(5);
         i = i + PACKET_LEN;
       }
     }
     else
     {
-	  printHEX("BTMsg",UI);
+	  // printHEX("BTMsg",UI);
       AndeeTx.setValue((const char*)UI);
+	  delay(5);
     }	
 	AndeeTx.setValue(0);
   }
@@ -212,7 +212,7 @@ void systemTime(void)
 						   0x00,0x00,0x00,0x00,0x00,0x00,
 						   0x00,0x00,0x00,0x00,0x00,0x00};
 	btSend(msgToPhone);
-	//delay(5);
+	delay(5);
 	memset(msgToPhone,0x00,18);
 }
 
@@ -250,7 +250,7 @@ void processReply()
 	unsigned char pressBuffer = 0;
 	if(readBuffer[0] != 0x00)
 	{
-		printHEX("readBuffer" , readBuffer);
+		// printHEX("readBuffer" , readBuffer);
 	}	
 	else
 	{
@@ -1281,8 +1281,7 @@ void AndeeHelper::getTimeInput(int* h,int* m,int* s)
 	phoneBuffer[4] = 0x00;
 	*m = atoi(phoneBuffer+2);
 	phoneBuffer[2] = 0x00;
-	*h = atoi(phoneBuffer);
-	
+	*h = atoi(phoneBuffer);	
 	return;
 }
 
@@ -1327,12 +1326,13 @@ int AndeeHelper::isPressed(void)
 		if(inputTypeBuffer == '0')
 		{
 			char* buffer = new char[18];
-			buffer[0] = END_TAG_UIXYWH;
-			buffer[1] = START_TAG_UIXYWH;
-			buffer[2] = ACKN;
-			buffer[3] = SEPARATOR;
-			buffer[4] = id;
-			buffer[5] = END_TAG_UIXYWH;
+			// buffer[0] = END_TAG_UIXYWH;
+			buffer[0] = START_TAG_UIXYWH;
+			buffer[1] = ACKN;
+			buffer[2] = SEPARATOR;
+			buffer[3] = id;
+			buffer[4] = END_TAG_UIXYWH;
+			buffer[5] = '\0';
 			for(int l = 6; l < 18; l++)
 			{
 				buffer[l] = 0x00;
@@ -1344,21 +1344,19 @@ int AndeeHelper::isPressed(void)
 	else
 	{
 		char* buffer = new char[18];
-			buffer[0] = END_TAG_UIXYWH;
-			buffer[1] = START_TAG_UIXYWH;
-			buffer[2] = ACKN;
-			buffer[3] = SEPARATOR;
-			buffer[4] = id;
-			buffer[5] = END_TAG_UIXYWH;
+			// buffer[0] = END_TAG_UIXYWH;
+			buffer[0] = START_TAG_UIXYWH;
+			buffer[1] = ACKN;
+			buffer[2] = SEPARATOR;
+			buffer[3] = id;
+			buffer[4] = END_TAG_UIXYWH;
+			buffer[5] = '\0';
 			for(int l = 6; l < 18; l++)
 			{
 				buffer[l] = 0x00;
-			}
-			
-		 
+			}		 
 			btSend(buffer);
 	}
-	
 }
 
 int AndeeHelper::pressCounter()
@@ -1589,7 +1587,7 @@ void AndeeHelper::update(void)
 			break;
 		}
 		btSend(bleBuffer);
-		delay(10);
+		// delay(5);
 	}	
 }
 
