@@ -267,16 +267,13 @@ void processReply()
 		
 				
 			if(buttonBuffer[((i*2)+2)] == readBuffer[2])
-			{
-				pressBuffer = buttonBuffer[((i*2)+3)];				
-				pressBuffer++;
-				
-				sprintf(buttonBuffer + ((i*2)+3),"%c",pressBuffer);
+			{				
+				sprintf(buttonBuffer + ((i*2)+3),"%c",(readBuffer[4]+16));
 				break;
 			}
-			else if(buttonBuffer[((i*2)+2)] == 0x00)
+			else if(buttonBuffer[((i*2)+2)] == 0x00)//
 			{
-				sprintf(buttonBuffer + ((i*2)+2), "%c%c",readBuffer[2],'1');				
+				sprintf(buttonBuffer + ((i*2)+2), "%c%c",readBuffer[2],(readBuffer[4]+16));				
 				break;
 			}
 		}
@@ -1294,7 +1291,7 @@ void AndeeHelper::getTimeInput(int* h,int* m,int* s)
 
 int AndeeHelper::isPressed(void)
 {
-	
+	// printHEX("buttonBuffer",buttonBuffer);
 	for(int i = 0; i<buttonNumber;i++)
 	{
 		int pos = (i*2)+2;
