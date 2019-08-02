@@ -248,6 +248,8 @@ extern AndeeClass Andee;
 	
 	char tempBuffer[12];
 	
+	unsigned volatile int updateLoop;
+	
 	public:	
 		
 	void setId(int);
@@ -378,7 +380,8 @@ extern AndeeClass Andee;
 	
 	int pressCounter(void);
 	//This function serves as a counter for the number of times a button has been pressed. This function returns an integer
-		
+			
+	void update(unsigned int);
 	void update(void);
 	//This function is very important. If this function is not called, the widget will not appear. This function does the combining of all the widget attributes e.g.title, data, unit, colors into 1 data buffer. This buffer will then be sent to the smartphone/tablet. Each type will have a different data configuration. Look at the sprintf functions of each type to see what attributes are being used for a widget
     
