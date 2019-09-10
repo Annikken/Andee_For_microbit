@@ -6,7 +6,7 @@
 
 #include <Andee_for_microbit.h>
 
-char Andee_microbitVersion[5] = {'1','.','0','.','0'};
+char Andee_microbitVersion[5] = {'0','.','6','.','0'};
 char versionBuff[18];
 
 int nameFlag = 0;
@@ -1157,7 +1157,7 @@ void AndeeHelper::setData(const char* data)
 void AndeeHelper::setData(int data)
 {		
 	memset(dataBuffer,0x00,32);			
-	sprintf(dataBuffer, "%d\0", data);
+	sprintf(dataBuffer, "%d", data);
 }
 
 void AndeeHelper::setData(float data,char decPlace)
@@ -1359,14 +1359,13 @@ int AndeeHelper::isPressed(void)
 	flashBuffer = 0x00;
 	return 0;
 }
- void AndeeHelper::ack(void)
-{	 
+ void AndeeHelper::ack(void) 
+{	
 	if(bleBuffer[1] == BUTTON_IN)
 	{
 		if(inputTypeBuffer == '0')
-		{
+		{			
 			char* buffer = new char[18];
-			// buffer[0] = END_TAG_UIXYWH;
 			buffer[0] = START_TAG_UIXYWH;
 			buffer[1] = ACKN;
 			buffer[2] = SEPARATOR;
@@ -1376,15 +1375,14 @@ int AndeeHelper::isPressed(void)
 			for(int l = 6; l < 18; l++)
 			{
 				buffer[l] = 0x00;
-			}
+			}		 
 			btSend(buffer);
 		}
 
 	}
 	else
-	{
+	{		
 		char* buffer = new char[18];
-			// buffer[0] = END_TAG_UIXYWH;
 			buffer[0] = START_TAG_UIXYWH;
 			buffer[1] = ACKN;
 			buffer[2] = SEPARATOR;
