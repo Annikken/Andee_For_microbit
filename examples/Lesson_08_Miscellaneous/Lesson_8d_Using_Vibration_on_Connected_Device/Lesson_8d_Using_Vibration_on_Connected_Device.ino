@@ -1,9 +1,9 @@
 /************************************************************
   [Annikken Andee]
   ================
-  Lesson 1a
-  Creating Your First Display Boxes!
-
+  Lesson 8d
+  Making the smartdevice vibrate using the Annikken Andee
+  
   Check out our Resources section for more information and 
   ideas on what you can do with the Annikken Andee!
   https://annikken.gitbooks.io/annikken-andee/content/
@@ -11,8 +11,10 @@
   Contact us at andee@annikken.com if there are 
   bugs in this sketch or if you need help with the 
   Annikken Andee
-  
 ************************************************************/
+
+/*In this lesson, you will learn how to make the smartdevice vibrate.
+Users can use the vibrate function to perform alerts*/
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
@@ -21,14 +23,13 @@
 // Every object that appears on your smartphone's screen
 // needs to be declared like this:
 AndeeHelper objectA;
-AndeeHelper objectB;
-// We're creating two objects
 
 // The setup() function is meant to tell Arduino what to do 
 // only when it starts up.
 void setup()
 {
   Andee.begin();  // Setup communication between Annikken Andee and Arduino
+  Andee.clear();  // Clear the screen of any previous displays
   setInitialData(); // Define object types and their appearance
 }
 
@@ -43,29 +44,23 @@ void setInitialData()
   objectA.setLocation(0, 0, FULL); // Sets the location and size of your object
   /* setLocation (row, col, size)
      Row: From 0 (top-most) to 3
-     Col: From 0 (left-most) to 3. There is no more scrolling
+     Col: From 0 (left-most) to 9. If there are too many objects on that row, you can
+          scroll from left to right.
      Size: The following sizes are available for you to choose:
      FULL, HALF, ONE_THIRD, ONE_QUART, TWO_THIRD, THREE_QUART */
-  objectA.setTitle("This goes to the title bar");
-  objectA.setData("This goes to the data field");
-  objectA.setUnit("This goes to the units field"); // Optional
-    
-  
-  //// Let's draw the second object! ////////////////////////////////////////
-  
-  objectB.setId(1); // Don't forget to give it a unique ID number
-  objectB.setType(DATA_OUT); // Another display box
-  objectB.setLocation(1,0,FULL); // Second row, left-most, full size
-  objectB.setTitle("Hello");
-  objectB.setData("World!");
+  objectA.setTitle("Vibration");
+  objectA.setData("This sketch is to test vibration on this device");  
 }
 
 // Arduino will run instructions here repeatedly until you power it off.
 void loop()
-{  
-  objectA.update(); // Call update() to refresh the display on your screen
-  objectB.update(); // If you forgot to call update(), your object won't appear
-
-  // A short delay is necessary to give Andee time to communicate with the smartphone
-  delay(500); 
+{
+  if(Andee.isConnected())
+  {
+    Andee.vibrate();//Use this function to tell your connected device to vibrate
+    delay(2000);
+  }
+    
+  objectA.update(); // Call update() to refresh the display on your screen 
+  delay(100);//delay for 2 seconds so that the vibration on the device occurs every 2 seconds
 }
