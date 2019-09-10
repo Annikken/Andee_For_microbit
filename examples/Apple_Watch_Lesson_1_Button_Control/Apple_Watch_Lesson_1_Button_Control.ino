@@ -19,7 +19,7 @@
  bugs in this sketch or if you need help with the 
  Annikken Andee
 ************************************************************/
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // Apple Watch UI
 AndeeHelper WatchTitle; // This will be used to set the Title on the Watch UI

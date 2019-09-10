@@ -15,7 +15,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // We'll create several display boxes to demonstrate how you
 // can make use of the various available colours!

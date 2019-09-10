@@ -18,7 +18,7 @@
   bugs in this sketch or if you need help with the 
   Annikken Andee
 ************************************************************/
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 AndeeHelper ghost;
 

@@ -17,7 +17,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // We'll just create one button to toggle
 AndeeHelper displayState;
@@ -61,6 +61,7 @@ void setInitialData()
   togglebutton.setType(BUTTON_IN); // Defines object as a button
   togglebutton.setLocation(1,0,FULL);
   togglebutton.setTitle("Switch to HIGH"); // Sets the initial words for button
+  togglebutton.setInputMode(NO_ACK);
   // You can't use setData() and setUnit() for buttons.
 }
 
@@ -83,7 +84,6 @@ void loop()
   if( togglebutton.isPressed() )
   {
     togglebutton.ack(); // Acknowledge button press. You must put this or your phone will be waiting
-    
     if(state == 0) // If in a LOW state
     {
       togglebutton.setTitle("Switch to LOW");
@@ -99,5 +99,5 @@ void loop()
   displayState.update(); // Update new info onto smartphone screen 
   togglebutton.update(); 
 
-  delay(300); // Always leave a short delay for Bluetooth communication
+  delay(200); // Always leave a short delay for Bluetooth communication
 }

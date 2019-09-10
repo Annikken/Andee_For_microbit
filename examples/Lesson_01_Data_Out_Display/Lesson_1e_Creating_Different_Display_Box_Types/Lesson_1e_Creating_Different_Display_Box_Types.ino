@@ -16,7 +16,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 //We will be creating 3 different display box types
 AndeeHelper displayBoxA;

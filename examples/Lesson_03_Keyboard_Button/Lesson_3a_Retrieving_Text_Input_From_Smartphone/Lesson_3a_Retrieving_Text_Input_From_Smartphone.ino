@@ -15,7 +15,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // We'll create a text input button and a display box to display
 // the user input
@@ -61,11 +61,11 @@ void loop()
   if( textInputButton.isPressed() )
   {
     memset(userInput, 0x00, 32); // Empty the contents of the string before receiving user input
-    textInputButton.ack(); // Acknowledge button press or else phone will be left waiting
+    
     textInputButton.getKeyboardMessage(userInput); // Display keyboard and store input into userInput
     displaybox.setData(userInput); // Display user input on the display box
   }
-  
+  textInputButton.ack(); // Acknowledge button press or else phone will be left waiting
   displaybox.update(); // Always remember to update so that new content will be displayed
   textInputButton.update();
   

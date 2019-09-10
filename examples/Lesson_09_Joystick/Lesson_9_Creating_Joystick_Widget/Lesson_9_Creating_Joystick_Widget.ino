@@ -1,7 +1,7 @@
 /************************************************************
   [Annikken Andee]
   ================
-  Lesson 10a
+  Lesson 9
   Creating a Joystick Widget!
 
   Check out our Resources section for more information and 
@@ -16,7 +16,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // Every object that appears on your smartphone's screen
 // needs to be declared like this:

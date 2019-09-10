@@ -18,7 +18,7 @@ Users can use the vibrate function to perform alerts*/
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // Every object that appears on your smartphone's screen
 // needs to be declared like this:

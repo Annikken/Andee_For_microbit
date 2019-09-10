@@ -15,7 +15,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // We'll need 6 buttons to increase/decrease the red, green
 // and blue channels of our RGB LED

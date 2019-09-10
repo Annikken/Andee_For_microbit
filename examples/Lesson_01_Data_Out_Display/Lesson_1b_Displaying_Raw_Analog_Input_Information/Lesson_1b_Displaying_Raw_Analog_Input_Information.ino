@@ -18,7 +18,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // We'll creating one object to display the analog input signal
 AndeeHelper analogDisplay;
@@ -58,7 +58,7 @@ void loop()
   analogDisplay.update(); // Update the display to show the new value
     
   // A short delay is necessary to give Andee time to communicate with the smartphone
-  delay(500); 
+  delay(300); 
 }
 
 // FUN FACT! Did you know that if you press and hold on the display box, your phone will

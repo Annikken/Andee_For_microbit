@@ -21,7 +21,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // We'll create a display and a button to show you how to
 // program a button to do something
@@ -148,13 +148,15 @@ void loop()
     
     sliderDiscrete.moveSliderToValue(sliderPosA);
     sliderContinuous.moveSliderToValue(sliderPosB);
+    sliderDisplay.moveSliderToValue(sliderTotal);
   }
 
   sliderDisplay.moveSliderToValue(sliderTotal,2);//2 represents the number of decimal place needed
 
+  buttonResetPosition.ack();
   sliderDisplay.update();
   sliderDiscrete.update();
   sliderContinuous.update();
   buttonResetPosition.update();
-  delay(50); // Always leave a short delay for Bluetooth communication
+  delay(100); // Always leave a short delay for Bluetooth communication
 }

@@ -15,7 +15,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // We'll have a button to allow the user to disconnect
 AndeeHelper disconnectButton;

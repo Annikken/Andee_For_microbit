@@ -16,7 +16,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // Every object that appears on your smartphone's screen
 // needs to be declared like this:
@@ -67,5 +67,5 @@ void loop()
   objectB.update(); // If you forgot to call update(), your object won't appear
 
   // A short delay is necessary to give Andee time to communicate with the smartphone
-  delay(500); 
+  delay(300); 
 }

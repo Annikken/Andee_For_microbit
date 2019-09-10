@@ -14,7 +14,7 @@
 ************************************************************/
 
 // You only need to run this code once.
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 void setup()
 {

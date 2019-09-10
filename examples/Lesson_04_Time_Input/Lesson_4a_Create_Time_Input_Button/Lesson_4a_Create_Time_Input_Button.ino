@@ -15,7 +15,7 @@
 
 // Always include these libraries. Annikken Andee needs them
 // to work with the Arduino!
-#include <Andee_for_Nano.h>
+#include <Andee_for_microbit.h>
 
 // We'll need a date input button and a display box to provide feedback
 AndeeHelper displaybox;
@@ -58,8 +58,6 @@ void loop()
 {
   if( timeInputButton.isPressed() )
   { 
-    timeInputButton.ack();
-    
     // Display time picker and store it in the three variables - hh, mm, and ss
     timeInputButton.getTimeInput(&hh, &mm, &ss); 
     
@@ -67,7 +65,7 @@ void loop()
     sprintf(tempString, "%02d:%02d:%02d", hh, mm, ss);
     displaybox.setData(tempString);
   }
-  
+  timeInputButton.ack();
   displaybox.update();
   timeInputButton.update();
   
