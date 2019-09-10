@@ -6,7 +6,7 @@
 
 #include <Andee_for_microbit.h>
 
-char Andee_microbitVersion[5] = {'4','.','0','.','1'};
+char Andee_microbitVersion[5] = {'1','.','0','.','0'};
 char versionBuff[18];
 
 int nameFlag = 0;
@@ -216,10 +216,13 @@ void systemTime(void)
 	memset(msgToPhone,0x00,18);
 }
 
-void dtostrf(int value,int zero, int decPlace,char*)
+void floattostrf(char* dest, int decPlace, float source)
 {
-	char newColor[5];
-	memset(newColor,0x00,5);
+	snprintf(dest, 10,"%.*f",decPlace,source);
+}
+void floattostrf(char* dest, int decPlace, double source)
+{
+	snprintf(dest, 10,"%.*f",decPlace,source);
 }
 
 void versionNumber(void)
@@ -283,9 +286,9 @@ void processReply()
 			memset(phoneBuffer,0x00,64);
 			int buffLen = strlen(readBuffer);			
 			memcpy(phoneBuffer,readBuffer + 4,(buffLen - 4));
-			Serial.println(phoneBuffer);
+			// Serial.print("phoneBuffer:"); Serial.println(phoneBuffer);
 		}
-		memset(readBuffer,0x00,128);
+		memset(readBuffer,0x00,READBUFFERMAX);
 		return;
 	}
 	else if(readBuffer[0] == SLIDER_IN)
@@ -326,7 +329,7 @@ void processReply()
 			}
 		}
     
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 	}
 	else if(readBuffer[0] == TIMEEPOCH)
 	{
@@ -366,38 +369,39 @@ void processReply()
 		sysTime = atol(buffer) + (gmt*3600) + (dst*3600) ;
 		sprintf(phoneBuffer,"%ld",sysTime);
 		//setTime(sysTime);
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 	}
 	else if(readBuffer[0] == JOYSTICK)
 	{
 		memset(phoneBuffer,0x00,64);
-		memcpy(phoneBuffer,readBuffer,10);
-		phoneBuffer[9] = '\0';
-		memset(readBuffer,0x00,80);		
+		memcpy(phoneBuffer,readBuffer+2,10);
+		phoneBuffer[10] = '\0';
+		// Serial.print("phoneBuffer");Serial.println(phoneBuffer);
+		memset(readBuffer,0x00,READBUFFERMAX);		
 	}
 	else if(readBuffer[0] == GYRO)
 	{
 		memset(sensorsBuffer,0x00,64);		
 		memcpy(sensorsBuffer,readBuffer+2,strlen(readBuffer)-2);
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 	}
 	else if(readBuffer[0] == LAC)
 	{
 		memset(sensorsBuffer,0x00,64);		
 		memcpy(sensorsBuffer,readBuffer+2,strlen(readBuffer)-2);
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 	}
 	else if(readBuffer[0] == GRAV)
 	{
 		memset(sensorsBuffer,0x00,64);		
 		memcpy(sensorsBuffer,readBuffer+2,strlen(readBuffer)-2);
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 	}
 	else if(readBuffer[0] == GPS)
 	{
 		memset(sensorsBuffer,0x00,64);		
 		memcpy(sensorsBuffer,readBuffer+2,strlen(readBuffer)-2);
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 	}
 	
 	else if(readBuffer[0] == WATCH)
@@ -434,12 +438,12 @@ void processReply()
 				
 			}
 		}
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 	}
 	 else if(readBuffer[0] == 0x88)
 	{
 		AndeeAlive= true;
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 		Serial.println("testing receivers");	
 		return;
 	}
@@ -449,7 +453,7 @@ void processReply()
 	}
 	else
 	{
-		memset(readBuffer,0x00,80);
+		memset(readBuffer,0x00,READBUFFERMAX);
 		Serial.println("Command not recognised");
 	} 
 }
@@ -1061,6 +1065,16 @@ void AndeeHelper::setSubType(char type)
 	
 }
 
+void AndeeHelper::requireAck(bool input){
+	if (input == true)
+	{
+		setInputMode(ACK);
+	}
+	else
+	{
+		setInputMode(NO_ACK);
+	}
+}	
 /////////////////////////////////////////////////////////////////////
 //                                                                 //
 //                           Set Colours                           //
@@ -1126,11 +1140,18 @@ void AndeeHelper::setTextColor(char* color)
 void AndeeHelper::setData(const char* data)
 {
 	memset(dataBuffer,0x00,32);		
-	if(strlen(data) <= 0)
+	int l = strlen(data);
+		
+	if(l <= 0)
 	{
 		data = "     ";
+		l = 5;
 	}
-    sprintf(dataBuffer, "%s\0", data);
+	else if (l >= 30)
+	{
+		l = 30;
+	}	
+	snprintf(dataBuffer, l + 1, "%s", data);
 }
 
 void AndeeHelper::setData(int data)
@@ -1142,13 +1163,13 @@ void AndeeHelper::setData(int data)
 void AndeeHelper::setData(float data,char decPlace)
 {		
 	memset(dataBuffer,0x00,32);		
-	dtostrf(data,3,decPlace,dataBuffer);
+	floattostrf(dataBuffer,decPlace,data);
 }
 
 void AndeeHelper::setData(double data,char decPlace)
 {		
 	memset(dataBuffer,0x00,32);	
-	dtostrf(data,3,decPlace,dataBuffer);
+	floattostrf(dataBuffer,decPlace,data);
 }
 
 
@@ -1156,11 +1177,18 @@ void AndeeHelper::setData(double data,char decPlace)
 void AndeeHelper::setTitle(const char* title)
 {
 	memset(titleBuffer,0x00,32);	
-	if(strlen(title) <= 0)
+	int l = strlen(title);
+		
+	if(l <= 0)
 	{
 		title = "     ";
+		l = 5;
 	}
-	sprintf(titleBuffer, "%s", title);
+	else if (l >= 30)
+	{
+		l = 30;
+	}	
+	snprintf(titleBuffer, l+1, "%s", title);
 }
 
 void AndeeHelper::setTitle(int title)
@@ -1172,13 +1200,13 @@ void AndeeHelper::setTitle(int title)
 void AndeeHelper::setTitle(float title, char decPlace)
 {
 	memset(titleBuffer,0x00,32);	
-	dtostrf(title,3,decPlace,titleBuffer);
+	floattostrf(titleBuffer,decPlace,title);
 }
 
 void AndeeHelper::setTitle(double title, char decPlace)
 {
 	memset(titleBuffer,0x00,32);	
-	dtostrf(title,3,decPlace,titleBuffer);
+	floattostrf(titleBuffer,decPlace,title);
 }
 
 
@@ -1186,11 +1214,18 @@ void AndeeHelper::setTitle(double title, char decPlace)
 void AndeeHelper::setUnit(const char* unit)
 {
 	memset(unitBuffer,0x00,32);    
-	if(strlen(unit) <= 0)
+	int l = strlen(unit);
+		
+	if(l <= 0)
 	{
 		unit = "     ";
+		l = 5;
 	}
-	sprintf(unitBuffer, "%s", unit);
+	else if (l >= 30)
+	{
+		l = 30;
+	}	
+	snprintf(unitBuffer, l+1, "%s", unit);
 }
 
 void AndeeHelper::setUnit(int unit)
@@ -1202,13 +1237,13 @@ void AndeeHelper::setUnit(int unit)
 void AndeeHelper::setUnit(float unit, char decPlace)
 {
 	memset(unitBuffer,0x00,32);	
-	dtostrf(unit,3,decPlace,unitBuffer);
+	floattostrf(unitBuffer,decPlace,unit);
 }
 
 void AndeeHelper::setUnit(double unit, char decPlace)
 {
 	memset(unitBuffer,0x00,32);	
-	dtostrf(unit,3,decPlace,unitBuffer);
+	floattostrf(unitBuffer,decPlace,unit);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -1219,26 +1254,26 @@ void AndeeHelper::setUnit(double unit, char decPlace)
 
 void AndeeHelper::setMinMax(int min, int max)
 {
-	memset(minBuffer,0x00,5);	
-	memset(maxBuffer,0x00,5);	
+	memset(minBuffer,0x00,10);	
+	memset(maxBuffer,0x00,10);	
 	sprintf(minBuffer,"%d", min);
 	sprintf(maxBuffer,"%d", max);
 }
 
 void AndeeHelper::setMinMax(float min,float max,char decPlace)
 {
-	memset(minBuffer,0x00,5);	
-	memset(maxBuffer,0x00,5);
-	dtostrf(min,3,decPlace,minBuffer);
-	dtostrf(max,3,decPlace,maxBuffer);
+	memset(minBuffer,0x00,10);	
+	memset(maxBuffer,0x00,10);
+	floattostrf(minBuffer,decPlace,min);
+	floattostrf(maxBuffer,decPlace,max);
 }
 
 void AndeeHelper::setMinMax(double min,double max,char decPlace)
 {
-	memset(minBuffer,0x00,5);	
-	memset(maxBuffer,0x00,5);
-	dtostrf(min,3,decPlace,minBuffer);
-	dtostrf(max,3,decPlace,maxBuffer);
+	memset(minBuffer,0x00,10);	
+	memset(maxBuffer,0x00,10);
+	floattostrf(minBuffer,decPlace,min);
+	floattostrf(maxBuffer,decPlace,max);
 }
 
 /* void AndeeHelper::setKeyboardType(char type)
@@ -1248,7 +1283,15 @@ void AndeeHelper::setMinMax(double min,double max,char decPlace)
 
 void AndeeHelper::getKeyboardMessage(char* message)
 {	
-	sprintf(message,"%s", phoneBuffer);
+	int l = strlen(phoneBuffer);
+	if(l >= 32)
+	{
+		snprintf(message, 32, "%s", phoneBuffer);
+	}
+	else
+	{
+		snprintf(message, l + 1, "%s", phoneBuffer);
+	}	
 	return;	
 }
 
@@ -1370,20 +1413,20 @@ int AndeeHelper::pressCounter()
 void AndeeHelper::setSliderInitialValue(int value)
 {
 	sprintf(dataBuffer,"%d",value);
-	sprintf(tempBuffer,"%d",value);
+	//sprintf(tempBuffer,"%d",value);
 	flashBuffer = '1';
 }
 
 void AndeeHelper::setSliderInitialValue(float value,char decPlace)
 {
-	dtostrf(value,3,decPlace,dataBuffer);
-	dtostrf(value,3,decPlace,tempBuffer);
+	floattostrf(dataBuffer,decPlace,value);
+	// floattostrf(tempBuffer,decPlace,value);
 	flashBuffer = '1';
 }
 void AndeeHelper::setSliderInitialValue(double value,char decPlace)
 {
-	dtostrf(value,3,decPlace,dataBuffer);
-	dtostrf(value,3,decPlace,tempBuffer);
+	floattostrf(dataBuffer,decPlace,value);
+	// floattostrf(tempBuffer,decPlace,value);
 	flashBuffer = '1';
 }
 
@@ -1403,7 +1446,7 @@ void AndeeHelper::setSliderNumIntervals(int numInterval)
 	}
 }
 
-void AndeeHelper::getSliderValue(int* x)
+bool AndeeHelper::getSliderValue(int* x)
 {
 	char buffer[20];
 	unsigned int i = 0;
@@ -1419,16 +1462,18 @@ void AndeeHelper::getSliderValue(int* x)
 	
 	if(buffer[0] == 0x00)
 	{
-		*x = atoi(tempBuffer);
+		return false;
+		// *x = atoi(tempBuffer);
 	}		
 	else
 	{
 		*x = atoi(buffer);
+		setSliderInitialValue(*x);	
+		return true;
 	}	
-	setSliderInitialValue(*x);	
 }
 
-void AndeeHelper::getSliderValue(float* f)
+bool AndeeHelper::getSliderValue(float* f, int decPlace)
 {
 	char buffer[20];
 	unsigned int i = 0;
@@ -1442,16 +1487,18 @@ void AndeeHelper::getSliderValue(float* f)
 	}
 	if(buffer[0] == 0x00)
 	{
-		*f = atof(tempBuffer);
+		return false;
+		// *f = atof(tempBuffer);
 	}		
 	else
 	{
 		*f = atof(buffer);
+		setSliderInitialValue(*f, decPlace);
+		return true;
 	}	
-	setSliderInitialValue(*f);
 }
 
-void AndeeHelper::getSliderValue(double* d)
+bool AndeeHelper::getSliderValue(double* d, int decPlace)
 {
 	char buffer[20];
 	unsigned int i = 0;
@@ -1465,13 +1512,15 @@ void AndeeHelper::getSliderValue(double* d)
 	}
 	if(buffer[0] == 0x00)
 	{
-		*d = strtod(tempBuffer,NULL);
+		return false;
+		// *d = strtod(tempBuffer,NULL);
 	}		
 	else
 	{
 		*d = strtod(buffer,NULL);
-	}	
-	setSliderInitialValue(*d);
+		setSliderInitialValue(*d, decPlace);
+		return true;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -1482,23 +1531,27 @@ void AndeeHelper::getSliderValue(double* d)
 
 void AndeeHelper::getJoystick(int* x,int* y)
 {
-	char bufferX[4];
-	char bufferY[4];
+	char bufferX[5];
+	char bufferY[5];
 	
-	for(int i = 0;i<3;i++)
+	// printHEX("phoneBuffer",phoneBuffer);
+	
+	for(int i = 0;i<4;i++)
 	{
-		bufferX[i] = phoneBuffer[i+3];
+		bufferX[i] = phoneBuffer[i+2];
 	}
-	bufferX[3] = '\0';
+	bufferX[4] = '\0';
 	
-	for(int j = 0;j<3;j++)
+	for(int j = 0;j<4;j++)
 	{
 		bufferY[j] = phoneBuffer[j+6];
 	}
-	bufferY[3] = '\0';
-	 
+	bufferY[4] = '\0';
 	
-	if(id == phoneBuffer[1])
+	// printHEX("bufferX",bufferX);
+	// printHEX("bufferY",bufferY);
+	
+	if(id == phoneBuffer[0])
 	{
 		*x = atoi(bufferX); //- (int)100;
 		*y = atoi(bufferY); //- (int)100;		
@@ -1510,12 +1563,8 @@ void AndeeHelper::getJoystick(int* x,int* y)
 /////////////////////////////////////////////////////////////////////
 void AndeeHelper::update(unsigned int loop)
 {
-	BLECentral central = andeePeripheral.central();
-	andeePeripheral.poll();
-	processReply();
-	
+	Andee.poll();	
 	Andee.versionClear();
-	//AndeeNRF52.isConnected();
 	
 	if(loop == 0 || loop == updateLoop)
 	{
@@ -1575,7 +1624,7 @@ void AndeeHelper::update(unsigned int loop)
 				break;
 				
 				case JOYSTICK:
-					sprintf(bleBuffer,"%c%c%c%s%c%c%s%s%s%c%s%c", START_TAG_UIXYWH,JOYSTICK, id,xywhBuffer,inputTypeBuffer,SEPARATOR,	titleBGBuffer,titleFontBuffer,bodyBGBuffer,SEPARATOR,titleBuffer,END_TAG_UIXYWH);
+					sprintf(bleBuffer,"%c%c%c%s%c%c%s%s%c%s%c%s%c%s%c", START_TAG_UIXYWH,JOYSTICK, id,xywhBuffer,inputTypeBuffer,SEPARATOR,	titleBGBuffer, bodyBGBuffer,SEPARATOR,titleBuffer,SEPARATOR,unitBuffer,SEPARATOR,dataBuffer,END_TAG_UIXYWH);
 				break;
 				
 				case WATCH:

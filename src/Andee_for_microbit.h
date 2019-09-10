@@ -36,6 +36,10 @@ void systemTime(void);
 //This function will send a 'T' to the smartphone. This will trigger the app to send back the system time expressed in milliseconds since the Epoch.
 //The bytes sent are ASTART,'T',AEND
 
+void floattostrf(char*, int, float);
+void floattostrf(char*, int, double);
+//These functions convert a floating or a double number to a string
+
 void versionNumber(void);
 
 
@@ -228,10 +232,10 @@ extern AndeeClass Andee;
 	char unitBuffer[32];
 	//buffer for unit in a widget
 	
-	char minBuffer[5];
+	char minBuffer[10];
 	//buffer for min value. Only used in some widgets
 	
-	char maxBuffer[5];
+	char maxBuffer[10];
 	//buffer for max value. Only used in some widgets	
 	
 	char inputTypeBuffer;
@@ -362,11 +366,11 @@ extern AndeeClass Andee;
 	void setSliderNumIntervals(int);
 	//This functions sets the number of intervals the slider has	
 	
-	void getSliderValue(int*);
+	bool getSliderValue(int*);
 	//This function returns the value the slider is at for integers
-	void getSliderValue(float*);	
+	bool getSliderValue(float*,int);	
 	//This function works in a similar way as the above function but handles a float instead
-	void getSliderValue(double*);
+	bool getSliderValue(double*,int);
 	//This function works in a similar way as the above function but handles a double instead
 
 	void getJoystick(int*,int*);
