@@ -285,6 +285,8 @@ extern AndeeClass Andee;
 					NUMERIC for a Numeric Keyboard with symbols
 					NUMERIC_PW for a Numeric Keyboard that hides typed characters after a few seconds
 	*/
+	void requireAck(bool);	
+	//This function is for backwards compatibility with older Andee sketches. Does the same thing as setInputmode(ACK or NO_ACK)	
 		
 	void setSubType(char);
 	//*****DEPRECATED. THIS FUNCTION WILL BE USED INTERNALLY. USERS NO LONGER NEED TO DEFINE ARGUMENT OF THIS FUNCTION.****//
@@ -480,6 +482,20 @@ const char REMOVE = 'E';//
 #define NUMERIC '2'
 #define NUMERIC_PW '3'
 
+////////////////////DATE/TIME INPUT MACROS/////////////////////
+
+#define Jan 1
+#define Feb 2
+#define Mar 3
+#define Apr 4
+#define May 5
+#define Jun 6
+#define Jul 7
+#define Aug 8
+#define Sep 9
+#define Oct 10
+#define Nov 11
+#define Dec 12
 /////////////////////Slider Macros//////////////////////
 
 #define setActiveColor setTitleColor///Used for AnalogDial as well
@@ -498,6 +514,10 @@ const char REMOVE = 'E';//
 #define OFF '0'
 #define MAXSLIDER 10
 
+////////////////////////JOYSTICK MACROS//////////////////// 
+
+#define setYAxisMax setData
+#define setXAxisMax	setUnit
 /////////////////////////Text to Speech Macros//////////////////////
 
 #define US '0'
@@ -518,13 +538,15 @@ const char REMOVE = 'E';//
 ////////////////////////////////////Apple Watch Macros////////////////////////////////////
 #define setWatchColor setTitleColor
 #define setWatchTextColor setTitleTextColor
+#define setWatchText setTitle
 
-#define WATCH_TEXT 76
-#define WATCH_TITLE 77
-#define WATCH_BUTTON1 78
-#define WATCH_BUTTON2 79
-#define WATCH_BUTTON3 80
-#define WATCH_BUTTON4 81
+#define WATCH_TITLE 45//77
+					  
+#define WATCH_BUTTON1 46//78
+#define WATCH_BUTTON2 47//79
+#define WATCH_BUTTON3 48//80
+#define WATCH_BUTTON4 49//81
+#define WATCH_BUTTON5 50//82
 
 #define WATCH_1BUTTON_A	0
 #define WATCH_2BUTTON_A	1
